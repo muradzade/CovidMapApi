@@ -15,7 +15,7 @@ namespace CovidMapApi.Data
         }
         public void EnsurePopulated()
         {
-            CreateUser();
+            CreateUser().GetAwaiter();
         }
 
 

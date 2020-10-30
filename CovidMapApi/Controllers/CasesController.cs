@@ -69,14 +69,13 @@ namespace CovidMapApi.Controllers
 
         // POST api/<CasesController>
         [HttpPost]
-        [AllowAnonymous]
         public async Task<ActionResult> AddNewCase([FromBody] VirusCase virusCase)
         {
             if(ModelState.IsValid)
             {
                 virusCase.Date = virusCase.Date.ToLocalTime();
-                var result = _context.VirusCases.Where(v => DateTime.Compare(v.Date.Date, virusCase.Date.Date) == 0).Any();
-                if (result)
+                var result = await _context.VirusCases.FirstOrDefaultAsync(v => DateTime.Compare(v.Date.Date, virusCase.Date.Date) == 0);
+                if (result==null)
                 {
                     await _context.VirusCases.AddAsync(virusCase);
                     await _context.SaveChangesAsync();
