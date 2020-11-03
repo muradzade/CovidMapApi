@@ -74,7 +74,8 @@ namespace CovidMapApi.Controllers
             if(ModelState.IsValid)
             {
                 virusCase.Date = virusCase.Date.ToLocalTime();
-                var result = await _context.VirusCases.FirstOrDefaultAsync(v => DateTime.Compare(v.Date.Date, virusCase.Date.Date) == 0);
+                var result = await _context.VirusCases.FirstOrDefaultAsync(v => (DateTime.Compare(v.Date.Date, virusCase.Date.Date) == 0) &&
+                                            (v.CountryId==virusCase.CountryId));
                 if (result==null)
                 {
                     await _context.VirusCases.AddAsync(virusCase);
@@ -91,12 +92,13 @@ namespace CovidMapApi.Controllers
 
         // PUT api/<CasesController>/5
         [HttpPut]
-        public ActionResult Put([FromBody] VirusCase virusCase)
+        public ActionResult UpdateCase([FromBody] VirusCase virusCase)
         {
             if (ModelState.IsValid)
             {
                 virusCase.Date = virusCase.Date.ToLocalTime();
-                var result = _context.VirusCases.Where(v => DateTime.Compare(v.Date.Date, virusCase.Date.Date) == 0).Any();
+                var result = _context.VirusCases.Where(v => (DateTime.Compare(v.Date.Date, virusCase.Date.Date) == 0) && 
+                                        (v.CountryId==virusCase.CountryId)).Any();
                 if (result)
                 {
                     _context.Entry(virusCase).State = EntityState.Modified;

@@ -36,6 +36,7 @@ namespace CovidMapApi
 
             services.AddCors();
             services.AddControllers();
+
             services.AddDbContext<CasesApiContext>(options =>
                     options.UseSqlServer(
                         Configuration.GetConnectionString("DefaultConnection")));
